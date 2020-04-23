@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useInput from './useInput';
 import useTabs from './useTabs';
+import useTitle from './useTitle';
 import styled from 'styled-components'
 
 const content = [
@@ -17,24 +18,31 @@ const content = [
 const Input = styled.input`
   width:100%
 `;
-const Number = (init, division) => {
+const Number = (init) => {
   const [number, setNumber] = useState(init);
-  if(division === 1){
+  const plus = () => {
     setNumber(number + 1);
-  }else if(division === 0){
+  }
+  const minus = () => {
     setNumber(number - 1);
   }
-  return number;
+  return {
+    number,
+    plus,
+    minus
+  };
 }
+
+
 
 const App = () => {
   const sayHello = () => console.log("123123");
-  useEffect(() => {
-    sayHello();
-  })
-  const num = Number(0);
+  const {number, plus, minus} = Number(0);
+  useEffect(sayHello);
   const name = useInput("")
   const tab = useTabs(0, content);
+  const titleUpdater = useTitle("Loading...");
+  setTimeout(() => titleUpdater("HolyFuck"),1000);
   return (
     <div>
       <p>
@@ -48,8 +56,9 @@ const App = () => {
       </div>
 
       <Input placeholder="text" {...name}/>
-
-      <button onClick={() => Number(num, 1)}>{num}</button>
+      <p>{number}</p>
+      <button onClick={plus}>+</button>
+      <button onClick={minus}>-</button>
     </div>
   );
 }
