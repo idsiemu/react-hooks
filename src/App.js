@@ -35,7 +35,6 @@ const Number = (init) => {
 
 const useClick = onClick => {
   const element = useRef();
-  
   useEffect(() => {
     if(typeof onClick === "function"){
       if(element.current) {
@@ -45,7 +44,7 @@ const useClick = onClick => {
         if(element.current){
           element.current.removeEventListener("click", onClick);
         }
-      };
+      }
     }
   }, []);
   return element;
@@ -53,8 +52,9 @@ const useClick = onClick => {
 
 const App = () => {
   const sayHello = () => console.log("HI");
+  const click = () => console.log("Click");
   const {number, plus, minus} = Number(0);
-  useEffect(sayHello);
+  useEffect(sayHello,[]);
   const name = useInput("")
   const tab = useTabs(0, content);
   const titleUpdater = useTitle("Loading...");
@@ -62,7 +62,7 @@ const App = () => {
   const refer = useRef();
   useEffect(() => {setTimeout(() => refer.current.focus(), 2000)},[refer]);
   
-  const title = useClick(sayHello);
+  const title = useClick(click);
   return (
     <div>
       <p ref={title}>
