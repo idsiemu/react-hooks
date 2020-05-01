@@ -2,6 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import useInput from './useInput';
 import useTabs from './useTabs';
 import useTitle from './useTitle';
+import useClick from './useClick';
+import useConfirm from './useConfirm';
+import usePreventLeave from './usePreventLeave';
 import styled from 'styled-components'
 
 const content = [
@@ -33,22 +36,8 @@ const Number = (init) => {
   };
 }
 
-const useClick = onClick => {
-  const element = useRef();
-  useEffect(() => {
-    if(typeof onClick === "function"){
-      if(element.current) {
-        element.current.addEventListener("click", onClick);
-      }
-      return () => {
-        if(element.current){
-          element.current.removeEventListener("click", onClick);
-        }
-      }
-    }
-  }, []);
-  return element;
-}
+
+
 
 const App = () => {
   const sayHello = () => console.log("HI");
@@ -63,6 +52,13 @@ const App = () => {
   useEffect(() => {setTimeout(() => refer.current.focus(), 2000)},[refer]);
   
   const title = useClick(click);
+
+  const deleteWord = () => {console.log("delete this")};
+  const abort = () => {console.log("abort")};
+  const confirmDelete = useConfirm("Are you sure?", deleteWord, abort);
+
+  const { enablePrevent, disablePrevent } = usePreventLeave();
+
   return (
     <div>
       <p ref={title}>
@@ -80,6 +76,11 @@ const App = () => {
       <p>{number}</p>
       <button onClick={plus}>+</button>
       <button onClick={minus}>-</button>
+      <hr/>
+      <button onClick={confirmDelete}>Delete this</button>
+      <hr/>
+      <button onClick={enablePrevent}>Portect</button>
+      <button onClick={disablePrevent}>UnPortect</button>
     </div>
   );
 }
