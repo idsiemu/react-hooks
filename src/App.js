@@ -36,7 +36,22 @@ const Number = (init) => {
   };
 }
 
-
+const useBeforeLeave = (onbefore) => {
+  
+  const handle = event => {
+    if(typeof onbefore !== 'function'){
+      return
+    }
+    const { clientY } = event;
+    if(clientY <= 0){
+      onbefore();
+    }
+  }
+  useEffect(() => {
+    document.addEventListener("mouseleave", handle);
+    return () => document.removeEventListener("mouseleave", handle);
+  },[]);
+}
 
 
 const App = () => {
@@ -59,6 +74,8 @@ const App = () => {
 
   const { enablePrevent, disablePrevent } = usePreventLeave();
 
+  const beforeLife = () => console.log("pleas don`t leave");
+  useBeforeLeave(beforeLife);
   return (
     <div>
       <p ref={title}>
@@ -80,6 +97,7 @@ const App = () => {
       <button onClick={confirmDelete}>Delete this</button>
       <hr/>
       <button onClick={enablePrevent}>Portect</button>
+      <button onClick={disablePrevent}>UnPortect</button>
       <button onClick={disablePrevent}>UnPortect</button>
     </div>
   );
