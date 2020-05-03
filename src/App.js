@@ -5,6 +5,7 @@ import useTitle from './useTitle';
 import useClick from './useClick';
 import useConfirm from './useConfirm';
 import usePreventLeave from './usePreventLeave';
+import useBeforeLeave from './useBeforeLeave';
 import styled from 'styled-components'
 
 const content = [
@@ -36,27 +37,21 @@ const Number = (init) => {
   };
 }
 
-const useBeforeLeave = (onbefore) => {
-  
-  const handle = event => {
-    if(typeof onbefore !== 'function'){
-      return
-    }
-    const { clientY } = event;
-    if(clientY <= 0){
-      onbefore();
-    }
-  }
+const useFadeIn = (duration = 1, delay = 0) => {
+  const element = useRef();
   useEffect(() => {
-    document.addEventListener("mouseleave", handle);
-    return () => document.removeEventListener("mouseleave", handle);
-  },[]);
+    if(element.current){
+      const { current } = element;
+      current.style.transition = `opacity ${duration}s ease-in-out ${delay}s`;
+      current.style.opacity = 1;
+    }
+  },[duration, delay])
+  return {ref: element, style: {opacity:0}};
 }
 
 
 const App = () => {
   const sayHello = () => console.log("HI");
-  const click = () => console.log("Click");
   const {number, plus, minus} = Number(0);
   useEffect(sayHello,[]);
   const name = useInput("")
@@ -66,6 +61,7 @@ const App = () => {
   const refer = useRef();
   useEffect(() => {setTimeout(() => refer.current.focus(), 2000)},[refer]);
   
+  const click = () => console.log("Click");
   const title = useClick(click);
 
   const deleteWord = () => {console.log("delete this")};
@@ -76,6 +72,9 @@ const App = () => {
 
   const beforeLife = () => console.log("pleas don`t leave");
   useBeforeLeave(beforeLife);
+
+  const fadeInH1 = useFadeIn(2, 1);
+  const fadeInP = useFadeIn(4, 10);
   return (
     <div>
       <p ref={title}>
@@ -98,7 +97,9 @@ const App = () => {
       <hr/>
       <button onClick={enablePrevent}>Portect</button>
       <button onClick={disablePrevent}>UnPortect</button>
-      <button onClick={disablePrevent}>UnPortect</button>
+      <hr/>
+      <h1 {...fadeInH1}>Hello</h1>
+      <p {...fadeInP}>fadeIn</p>
     </div>
   );
 }

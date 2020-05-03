@@ -4,7 +4,7 @@
 - [X] useInput
 - [ ] usePageLeave 사용자가 페이지를 떠나는 시점을 알려줌
 - [X] useClick 클릭 시점을 알려줌
-- [ ] useFadeIn 서서히 사라지게 하는거
+- [X] useFadeIn 서서히 사라지게 하는거
 - [ ] useFullscreen 풀스크린으로 만들거나 일반 화면으로 돌아가게 할 수 있음
 - [ ] useHover 마우스 올렸을 때 감지 되는거
 - [ ] useNetwork 온라인 유무를 판별
