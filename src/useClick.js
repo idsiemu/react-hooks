@@ -1,15 +1,14 @@
 import {useEffect, useRef} from 'react';
 
-const useClick = (onClick = null) => {
+const useClick = (onClick) => {
   const element = useRef();
   useEffect(() => {
       if(typeof onClick === "function"){
-        console.log(element.current);
-        console.log('functiop');
-        if(typeof element !== 'undefined') {
+        if(element.current) {
+          console.log(element.current);
           element.current.addEventListener("click", onClick);
           return () => {
-            if(typeof element !== 'undefined'){
+            if(element.current){
               element.current.removeEventListener("click", onClick);
             }
           }

@@ -6,6 +6,8 @@ import useClick from './useClick';
 import useConfirm from './useConfirm';
 import usePreventLeave from './usePreventLeave';
 import useBeforeLeave from './useBeforeLeave';
+import useFadeIn from './useFadeIn';
+import useNetwork from './useNetwork';
 import styled from 'styled-components'
 
 const content = [
@@ -37,17 +39,7 @@ const Number = (init) => {
   };
 }
 
-const useFadeIn = (duration = 1, delay = 0) => {
-  const element = useRef();
-  useEffect(() => {
-    if(element.current){
-      const { current } = element;
-      current.style.transition = `opacity ${duration}s ease-in-out ${delay}s`;
-      current.style.opacity = 1;
-    }
-  },[duration, delay])
-  return {ref: element, style: {opacity:0}};
-}
+
 
 
 const App = () => {
@@ -75,6 +67,11 @@ const App = () => {
 
   const fadeInH1 = useFadeIn(2, 1);
   const fadeInP = useFadeIn(4, 10);
+
+  const handleNetworkChange = (online) => {
+    console.log(online? "onLine!" : "offLine...");
+  }
+  const onLine = useNetwork(handleNetworkChange);
   return (
     <div>
       <p ref={title}>
@@ -100,6 +97,8 @@ const App = () => {
       <hr/>
       <h1 {...fadeInH1}>Hello</h1>
       <p {...fadeInP}>fadeIn</p>
+      <hr/>
+      <h1>{onLine ? "Online" : 'offLine'}</h1>
     </div>
   );
 }
