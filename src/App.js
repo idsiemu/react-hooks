@@ -8,6 +8,7 @@ import usePreventLeave from './usePreventLeave';
 import useBeforeLeave from './useBeforeLeave';
 import useFadeIn from './useFadeIn';
 import useNetwork from './useNetwork';
+import useScroll from './useScroll';
 import styled from 'styled-components'
 
 const content = [
@@ -39,7 +40,41 @@ const Number = (init) => {
   };
 }
 
-
+const useFullScreen = (callBack) => {
+  const element = useRef();
+  const runCb = isFull => {
+    if(callBack && typeof callBack === 'function'){
+      callBack(isFull);
+    }
+  }
+  const triggerFull = () => {
+    if(element.current){
+      if(element.current.requestFullscreen){
+        element.current.requestFullscreen();
+      }else if(element.current.mozRequestFullScreen){
+        element.current.mozRequestFullScreen();
+      }else if(element.current.webkitRequestFullscreen){
+        element.current.webkitRequestFullscreen();
+      }else if(element.current.msRequestFullscreen){
+        element.current.msRequestFullscreen();
+      }
+      runCb(true);
+    }
+  }
+  const exitFull = () => {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+    runCb(false);
+  }
+  return {element, triggerFull, exitFull};
+}
 
 
 const App = () => {
@@ -72,8 +107,15 @@ const App = () => {
     console.log(online? "onLine!" : "offLine...");
   }
   const onLine = useNetwork(handleNetworkChange);
+
+  const {y} = useScroll();
+
+  const onFullS = (isFull) => {
+    console.log(isFull ? "full" : "small");
+  }
+  const {element, triggerFull, exitFull} = useFullScreen(onFullS);
   return (
-    <div>
+    <div style={{height:"1000vh"}}>
       <p ref={title}>
         react hook
       </p>
@@ -99,6 +141,14 @@ const App = () => {
       <p {...fadeInP}>fadeIn</p>
       <hr/>
       <h1>{onLine ? "Online" : 'offLine'}</h1>
+      <hr/>
+      <h1 style={{color:y > 100 ? "red" : "blue"}}>H1</h1>
+      <hr/>
+      <div ref={element}>
+        <img alt="something" src="https://image.shutterstock.com/image-photo/flying-by-lake-600w-111732092.jpg"/>
+        <button onClick={exitFull}>exit</button>
+      </div>
+      <button onClick={triggerFull}>전체화면</button>
     </div>
   );
 }
