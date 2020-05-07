@@ -9,6 +9,8 @@ import useBeforeLeave from './useBeforeLeave';
 import useFadeIn from './useFadeIn';
 import useNetwork from './useNetwork';
 import useScroll from './useScroll';
+import useFullScreen from './useFullScreen';
+import useNotification from './useNotification';
 import styled from 'styled-components'
 
 const content = [
@@ -40,41 +42,7 @@ const Number = (init) => {
   };
 }
 
-const useFullScreen = (callBack) => {
-  const element = useRef();
-  const runCb = isFull => {
-    if(callBack && typeof callBack === 'function'){
-      callBack(isFull);
-    }
-  }
-  const triggerFull = () => {
-    if(element.current){
-      if(element.current.requestFullscreen){
-        element.current.requestFullscreen();
-      }else if(element.current.mozRequestFullScreen){
-        element.current.mozRequestFullScreen();
-      }else if(element.current.webkitRequestFullscreen){
-        element.current.webkitRequestFullscreen();
-      }else if(element.current.msRequestFullscreen){
-        element.current.msRequestFullscreen();
-      }
-      runCb(true);
-    }
-  }
-  const exitFull = () => {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    }
-    runCb(false);
-  }
-  return {element, triggerFull, exitFull};
-}
+
 
 
 const App = () => {
@@ -114,6 +82,8 @@ const App = () => {
     console.log(isFull ? "full" : "small");
   }
   const {element, triggerFull, exitFull} = useFullScreen(onFullS);
+
+  const triggerNotif = useNotification("I ll be god",{body: "I love"});
   return (
     <div style={{height:"1000vh"}}>
       <p ref={title}>
@@ -149,6 +119,8 @@ const App = () => {
         <button onClick={exitFull}>exit</button>
       </div>
       <button onClick={triggerFull}>전체화면</button>
+      <hr/>
+      <button onClick={triggerNotif}>Notification</button>
     </div>
   );
 }
