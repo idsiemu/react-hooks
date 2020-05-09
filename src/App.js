@@ -86,8 +86,8 @@ const App = () => {
 
   const triggerNotif = useNotification("I ll be god",{body: "I love"});
 
-  const {loading, error, data} = useAxios({url:"https://yts.lt/api/v2/list_movies.json"})
-  console.log(`loading : ${loading}, error: ${error}, data : ${data}`);
+  const {loading, error, data, refetch} = useAxios({url:"https://yts.mx/api/v2/list_movies.json"})
+  console.log(`loading : ${loading}, error: ${error}, data : ${JSON.stringify(data)}`);
 
   return (
     <div style={{height:"1000vh"}}>
@@ -126,6 +126,10 @@ const App = () => {
       <button onClick={triggerFull}>전체화면</button>
       <hr/>
       <button onClick={triggerNotif}>Notification</button>
+      <hr/>
+      <h1>{data && data.status}</h1>
+      <h2>{loading && "Loading"}</h2>
+      <button onClick={refetch}>Refetch</button>
     </div>
   );
 }
