@@ -12,6 +12,7 @@ import useScroll from './useScroll';
 import useFullScreen from './useFullScreen';
 import useNotification from './useNotification';
 import styled from 'styled-components'
+import useAxios from './useAxios';
 
 const content = [
   {
@@ -84,6 +85,10 @@ const App = () => {
   const {element, triggerFull, exitFull} = useFullScreen(onFullS);
 
   const triggerNotif = useNotification("I ll be god",{body: "I love"});
+
+  const {loading, error, data} = useAxios({url:"https://yts.lt/api/v2/list_movies.json"})
+  console.log(`loading : ${loading}, error: ${error}, data : ${data}`);
+
   return (
     <div style={{height:"1000vh"}}>
       <p ref={title}>

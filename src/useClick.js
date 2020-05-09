@@ -5,7 +5,6 @@ const useClick = (onClick) => {
   useEffect(() => {
       if(typeof onClick === "function"){
         if(element.current) {
-          console.log(element.current);
           element.current.addEventListener("click", onClick);
           return () => {
             if(element.current){
